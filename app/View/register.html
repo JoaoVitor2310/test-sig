@@ -5,27 +5,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register test SIG</title>
+    <link rel="stylesheet" href="./app/View/styles/auth-style.css">
 </head>
 
 <body>
     <h1>Teste SIG - João Vitor Matos Gouveia</h1>
-    <div>
-        <form action="">
-            <label>Crie sua conta</label>
-            <br>
+    <div class="auth-screen">
+        <form id="registerForm" method="POST" action="/api/register">
+            <h2>Crie sua conta</h2>
             <label>Digite o seu email</label>
             <br>
-            <input type="email" placeholder="Email">
+            <br>
+            <input type="email" id="emailInput" placeholder="Email">
+            <br>
             <br>
             <label>Digite a sua senha</label>
             <br>
-            <input type="password" placeholder="Senha">
+            <br>
+            <input type="password" id="passwordInput" placeholder="Senha">
+            <br>
             <br>
             <label>Digite novamente a senha</label>
             <br>
-            <input type="password" placeholder="Confirmar">
+            <br>
+            <input type="password" id="confirmPasswordInput" placeholder="Confirmar">
+            <br>
+            <br>
+            <input type="submit" name="action" value="Enviar"></input>
         </form>
     </div>
 </body>
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async function (event) {
+        event.preventDefault(); // Previne o comportamento padrão do formulário de recarregar a página
+
+        // Obtém os valores dos campos de entrada
+        const email = document.getElementById('emailInput').value;
+        const password = document.getElementById('passwordInput').value;
+        const confirm_password = document.getElementById('confirmPasswordInput').value;
+
+        if (password !== confirm_password) {
+            alert('Senhas diferentes, tente novamente.');
+            return;
+        }
+
+
+        // Constrói o objeto com os dados a serem enviados
+        const formData = {
+            email,
+            password,
+            confirm_password
+        };
+        console.log(formData);
+
+        // Envia a requisição POST para a rota /api/register
+
+        try {
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            // if (!response.ok) {
+            //     throw new Error('Erro ao registrar usuário');
+            // }
+
+            const data = await response.text();
+            console.log(data);
+            // Aqui você pode adicionar lógica para lidar com a resposta do servidor, se necessário
+        } catch (error) {
+            console.error(error); // Exibe o erro no console, se ocorrer algum
+            alert('Error: ' + error); // Exibe um alerta com o erro
+        }
+    });
+
+</script>
 
 </html>
