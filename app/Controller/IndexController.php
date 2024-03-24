@@ -6,6 +6,6 @@ class IndexController
     {
         echo '<br>
         IndexController
-        <br';
+        <br>';
     }
 }

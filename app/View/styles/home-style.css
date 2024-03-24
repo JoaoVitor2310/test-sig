@@ -1,0 +1,33 @@
+    body {
+        display: flex;
+        /* Torna o corpo um container flexível */
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+
+        justify-items: center;
+    }
+
+    div#content {
+        width: 80%;
+        display: grid;
+        background-color: red;
+        grid-template-rows: repeat(3, auto);
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    a:visited {
+        color: #000;
+    }
+
+    article {
+        background-color: aqua;
+    }

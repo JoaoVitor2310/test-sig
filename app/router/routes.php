@@ -5,13 +5,13 @@
 
 // Verifica a rota solicitada e chama o controlador correspondente
 $requestUri = $_SERVER['REQUEST_URI'];
-var_dump($requestUri);
-
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
+
+
 if ($requestMethod === 'POST' && $requestUri === '/api/register') {
-    echo 'RESPOSTA';
-    die;
+    echo 'RESPOSTA2';
+    exit;
     $userController = new UserController();
     $response = $userController->register();
 }

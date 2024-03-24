@@ -6,6 +6,6 @@ class ErrorController
     {
         echo '<br>
         ErrorController
-        <br';
+        <br>';
     }
 }

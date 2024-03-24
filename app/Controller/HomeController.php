@@ -6,6 +6,6 @@ class HomeController
     {
         echo '<br>
         HomeController
-        <br';
+        <br>';
     }
 }

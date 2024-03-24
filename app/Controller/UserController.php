@@ -1,36 +1,106 @@
 <?php
 
-// require_once 'UserModel.php';
-
 class UserController
 {
-    public function register()
+
+    public function register($registerData)
     {
-        // Aqui você pode realizar qualquer lógica necessária para registrar o usuário
-        // Por exemplo, acessar os dados do formulário e salvar no banco de dados
+        $email = isset ($registerData['email']) ? $registerData['email'] : null;
+        $password = isset ($registerData['password']) ? $registerData['password'] : null;
 
-        // Suponha que os dados do formulário estejam disponíveis no $_POST
-        $email = isset ($_POST['email']) ? $_POST['email'] : null;
-        $password = isset ($_POST['password']) ? $_POST['password'] : null;
+        if (empty ($email) || empty ($password)) { //Se não tiver os dados, eles virão como null ou vazio e será retornado um erro
 
-        if ($email === null || $password === null) { //Se não tiverem os dados, eles virão como null e será lançada uma exceção
-            throw new InvalidArgumentException('Email ou senha não foram fornecidos');
+            http_response_code(400);
+            return array(
+                'error' => true,
+                'message' => 'Dados não preenchidos.'
+            );
         }
-        echo json_encode(array('message' => 'Usuário registrado com sucesso'));
 
-        // Debug
-        // die;
+        if (strlen($password) < 5) {
+            http_response_code(400);
+            return array(
+                'error' => true,
+                'message' => 'Senha muito fraca.'
+            );
+        }
 
-        // Criptografa a senha (recomendado)
-        // $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        // Criptografa a senha
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         // // Cria uma instância do modelo de usuário
-        // $userModel = new UserModel();
+        $userModel = new UserModel();
 
         // // Chama o método para registrar o usuário
-        // $userModel->registerUser($email, $hashedPassword);
+        $dbResponse = $userModel->insertUser($email, $hashedPassword);
 
-        // // Responde com uma mensagem de sucesso
-        // echo json_encode(array('message' => 'Usuário registrado com sucesso'));
+        if ($dbResponse == 0) {
+            http_response_code(500);
+            return array(
+                'error' => true,
+                'message' => 'Erro ao cadastrar no banco de dados.'
+            );
+        }
+
+        session_start();
+        $_SESSION['login'] = $email;
+
+        http_response_code(201);
+        return array(
+            'error' => false,
+            'message' => 'Usuario registrado com sucesso.'
+            // 'message' => $hashedPassword
+        );
+
+
+    }
+
+    public function login($loginData)
+    {
+        $email = isset ($loginData['email']) ? $loginData['email'] : null;
+        $password = isset ($loginData['password']) ? $loginData['password'] : null;
+
+        if (empty ($email) || empty ($password)) { //Se não tiver os dados, eles virão como null ou vazio e será retornado um erro
+
+            http_response_code(400);
+            return array(
+                'error' => true,
+                'message' => 'Dados não preenchidos.'
+            );
+        }
+
+        // Cria uma instância do modelo de usuário
+        $userModel = new UserModel();
+
+        // // Chama o método para registrar o usuário
+        $dbResponse = $userModel->loginUser($email);
+
+        if (!$dbResponse) {
+            http_response_code(404);
+            return array(
+                'error' => true,
+                'message' => 'Usuário não encontrado.'
+            );
+        }
+
+        if (password_verify($password, $dbResponse['password'])) {
+            session_start();
+            $_SESSION['login'] = $email;
+
+            http_response_code(201);
+            return array(
+                'error' => false,
+                'message' => 'Login realizado com sucesso.'
+                // 'message' => $hashedPassword
+            );
+
+        } else {
+            http_response_code(403);
+            return array(
+                'error' => true,
+                'message' => 'Senha incorreta.'
+            );
+        }
+
     }
 }
