@@ -4,6 +4,19 @@ require_once '../utils/Conn.php';
 
 class UserModel
 {
+    public function searchUser($email)
+    {
+
+        $conn = new Conn();
+        $pdo = $conn->pdo();
+
+        $statement = $pdo->prepare("SELECT email FROM users WHERE email = '$email' LIMIT 1");
+        $statement->execute();
+
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        return $user;
+    }
+    
     public function insertUser($email, $password)
     {
 

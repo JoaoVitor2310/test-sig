@@ -28,10 +28,20 @@ class UserController
         // Criptografa a senha
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // // Cria uma instância do modelo de usuário
+        // Cria uma instância do modelo de usuário
         $userModel = new UserModel();
 
-        // // Chama o método para registrar o usuário
+        $userFromDB = $userModel->searchUser($email);
+
+        if($userFromDB){
+            http_response_code(400);
+            return array(
+                'error' => true,
+                'message' => 'Email já cadastrado.'
+            );
+        }
+
+        //Chama a função para registrar o usuário
         $dbResponse = $userModel->insertUser($email, $hashedPassword);
 
         if ($dbResponse == 0) {
@@ -49,7 +59,6 @@ class UserController
         return array(
             'error' => false,
             'message' => 'Usuario registrado com sucesso.'
-            // 'message' => $hashedPassword
         );
 
 

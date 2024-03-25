@@ -22,15 +22,16 @@ if (isset ($data) && !empty ($data) && array_key_exists('confirm_password', $dat
     // Envia a resposta como JSON
     header('Content-Type: application/json');
     echo json_encode($response);
-}
+}else if (isset ($data) && !empty ($data)) {
+    
+        $userController = new UserController();
+        $response = $userController->login($data);
+    
+        // Envia a resposta como JSON
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+
+
 
 // Login
-if (isset ($data) && !empty ($data)) {
-
-    $userController = new UserController();
-    $response = $userController->login($data);
-
-    // Envia a resposta como JSON
-    header('Content-Type: application/json');
-    echo json_encode($response);
-}
