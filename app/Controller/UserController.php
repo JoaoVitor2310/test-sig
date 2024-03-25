@@ -7,6 +7,7 @@ class UserController
     {
         $email = isset ($registerData['email']) ? $registerData['email'] : null;
         $password = isset ($registerData['password']) ? $registerData['password'] : null;
+        $confirm_password = isset ($registerData['confirm_password']) ? $registerData['confirm_password'] : null;
 
         if (empty ($email) || empty ($password)) { //Se não tiver os dados, eles virão como null ou vazio e será retornado um erro
 
@@ -22,6 +23,14 @@ class UserController
             return array(
                 'error' => true,
                 'message' => 'Senha muito fraca.'
+            );
+        }
+        
+        if($password !== $confirm_password){
+            http_response_code(400);
+            return array(
+                'error' => true,
+                'message' => 'As senhas não são iguais.'
             );
         }
 

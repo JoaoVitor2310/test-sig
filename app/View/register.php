@@ -53,7 +53,6 @@
             return;
         }
 
-
         // Constrói o objeto com os dados a serem enviados
         const registerData = {
             email,
@@ -61,7 +60,7 @@
             confirm_password
         };
 
-        // Envia a requisição POST para a rota /api/register
+        // Envia a requisição POST para o nosso backend
         const response = await fetch('app/router/UserRoutes.php', {
             method: 'POST',
             headers: {

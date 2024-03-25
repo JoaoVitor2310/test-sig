@@ -4,17 +4,11 @@ require_once '../controller/UserController.php';
 require_once '../models/UserModel.php';
 
 $jsonData = file_get_contents('php://input');
-// $registerData = json_decode($jsonData, true);
 $data = json_decode($jsonData, true);
 
-// echo $registerData;
-// echo $loginData;
-// echo 'teste@gmail.com';
-// echo json_encode(['email' => 'teste@gmail.com']);
-// echo json_encode($data);
 
-// Register
-if (isset ($data) && !empty ($data) && array_key_exists('confirm_password', $data)) {
+
+if (isset ($data) && !empty ($data) && array_key_exists('confirm_password', $data)) { // Register
 
     $userController = new UserController();
     $response = $userController->register($data);
@@ -22,7 +16,7 @@ if (isset ($data) && !empty ($data) && array_key_exists('confirm_password', $dat
     // Envia a resposta como JSON
     header('Content-Type: application/json');
     echo json_encode($response);
-}else if (isset ($data) && !empty ($data)) {
+}else if (isset ($data) && !empty ($data)) { // Login
     
         $userController = new UserController();
         $response = $userController->login($data);
@@ -34,4 +28,3 @@ if (isset ($data) && !empty ($data) && array_key_exists('confirm_password', $dat
 
 
 
-// Login

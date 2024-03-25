@@ -47,3 +47,8 @@
     /* #characterPage {
         background-color: red;
     } */
+
+    div#searchBar {
+        background-color: cyan;
+        border-radius: 1%;
+    }

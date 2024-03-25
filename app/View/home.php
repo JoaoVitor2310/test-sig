@@ -26,15 +26,47 @@ include 'app\utils\protect.php';
     <div id="searchBar">
         <!-- <input type="text" placeholder="Pesquisar"> -->
         <form id="searchForm">
-            <label><input type="radio" name="searchType" value="name"> Nome</label>
-            <label><input type="radio" name="searchType" value="status"> Status</label>
-            <label><input type="radio" name="searchType" value="species"> Espécie</label>
-            <label><input type="radio" name="searchType" value="type"> Tipo</label>
-            <label><input type="radio" name="searchType" value="gender"> Gênero</label>
-            <input hidden type="text" id="searchInput" placeholder="Pesquisar...">
-            <button  type="button" onclick="search()">Pesquisar</button>
+            <h3>Pesquisar: </h3>
+            <label>Nome</label>
+            <br>
+            <input type="text" id="searchName" placeholder="Digite o Nome">
+            <br>
+            <label>Status: </label>
+            <div id="statusOptions">
+                <label><input type="radio" name="status" value="alive"> Vivo</label>
+                <label><input type="radio" name="status" value="dead"> Morto</label>
+                <label><input type="radio" name="status" value="unknown"> Desconhecido</label>
+            </div>
+            <br>
+            <label>Espécie</label>
+            <br>
+            <input type="text" id="species" placeholder="Digite a Espécie">
+            <br>
+            <label>Tipo</label>
+            <br>
+            <input type="text" id="type" placeholder="Digite o Tipo">
+            <br>
+            <label>Gênero</label>
+            <div id="statusOptions">
+                <label><input type="radio" name="gender" value="female"> Mulher</label>
+                <label><input type="radio" name="gender" value="male"> Homem</label>
+                <label><input type="radio" name="gender" value="unknown"> Desconhecido</label>
+                <label><input type="radio" name="gender" value="genderless"> Sem gênero</label>
+            </div>
+            <br>
+            <button type="button" onclick="search()">Pesquisar</button>
         </form>
+
     </div>
+
+    <div id="pagination">
+        <span>Página</span>
+        <span id="pageNumber">1</span>
+        <br>
+        <button type="button" onclick="search(-1)"><- Anterior</button>
+                <button type="button" onclick="search(+1)">Próxima -></button>
+    </div>
+    <br>
 
     <div id="content">
         <!-- Exemplo -->
@@ -81,47 +113,97 @@ include 'app\utils\protect.php';
             contentDiv.appendChild(link);
 
             link.setAttribute('href', '?page=card&character=' + character.id);
-            p.innerHTML = `<img src="${character.image}" alt="${character.name} image"><br>Gender: ${character.gender}<br>Origin: ${character.origin.name}<br>Status: ${character.status}`;
+            p.innerHTML = `<img src="${character.image}" alt="${character.name} image"><br>Gender: ${character.gender}<br>Origin: ${character.origin.name}<br>Status: ${character.status}<br>Type: ${character.type ? character.type : 'Null'}`;
         });
     }
     getCharacters();
 
-    function search() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        const searchTypeInputs = document.querySelectorAll('input[name="searchType"]:checked');
-        const searchTypes = Array.from(searchTypeInputs).map(input => input.value);
+    const search = async (page) => {
+        const searchName = document.getElementById('searchName').value;
+        const species = document.getElementById('species').value;
+        const type = document.getElementById('type').value;
 
-        const articles = document.querySelectorAll('#content article');
+        let status = "";
+        const statusOptions = document.getElementsByName('status');
+        for (let i = 0; i < statusOptions.length; i++) {
+            if (statusOptions[i].checked) {
+                status = statusOptions[i].value;
+                break;
+            }
+        }
 
-        articles.forEach(article => {
-            const characterName = article.querySelector('h2').textContent.toLowerCase();
-            const characterDetails = article.querySelector('p').textContent.toLowerCase();
+        let gender = "";
+        const genderOptions = document.getElementsByName('gender');
+        for (let i = 0; i < genderOptions.length; i++) {
+            if (genderOptions[i].checked) {
+                gender = genderOptions[i].value;
+                break;
+            }
+        }
 
-            const matchesSearchType = searchTypes.some(type => {
-                if (type === 'name' && characterName.includes(searchTerm)) {
-                    return true;
-                }
-                if (type === 'status' && characterDetails.includes('status: ' + searchTerm)) {
-                    return true;
-                }
-                if (type === 'species' && characterDetails.includes('espécie: ' + searchTerm)) {
-                    return true;
-                }
-                if (type === 'type' && characterDetails.includes('tipo: ' + searchTerm)) {
-                    return true;
-                }
-                if (type === 'gender' && characterDetails.includes('gênero: ' + searchTerm)) {
-                    return true;
-                }
-                return false;
-            });
+        const queryParams = [];
 
-            if (matchesSearchType) {
-                article.style.display = 'block';
-            } else {
-                article.style.display = 'none';
+        if (searchName) queryParams.push(`name=${searchName}`);
+        if (status) queryParams.push(`status=${status}`);
+        if (species) queryParams.push(`species=${species}`);
+        if (type) queryParams.push(`type=${type}`);
+        if (gender) queryParams.push(`gender=${gender}`);
+
+        let pageNumber = document.getElementById('pageNumber').textContent;
+
+
+        let baseUrl = "https://rickandmortyapi.com/api/character?";
+
+        if (!page) {
+            baseUrl = "https://rickandmortyapi.com/api/character?" + queryParams.join('&');
+        } else {
+            pageNumber = parseInt(pageNumber);
+            pageNumber += page;
+            pageNumber <= 0 ? pageNumber = 1 : pageNumber;
+
+            let pageNumberHTML = document.getElementById('pageNumber');
+            pageNumberHTML.innerHTML = pageNumber;
+            baseUrl = "https://rickandmortyapi.com/api/character?" + `page=${pageNumber}&` + queryParams.join('&');
+        }
+
+        console.log(baseUrl);
+        console.log("pageNumber: " + pageNumber);
+
+        const response = await fetch(baseUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
             }
         });
+
+        const data = await response.json();
+        console.log(data);
+
+        if (data.error) {
+            alert("Nenhum personagem com essas características.")
+        } else {
+            const contentDiv = document.getElementById('content');
+            contentDiv.innerHTML = '';
+            const { results, info } = data;
+
+            results.forEach((character, index) => {
+                const article = document.createElement('article');
+                const link = document.createElement('a');
+                const header = document.createElement('header');
+                const h2 = document.createElement('h2');
+                const p = document.createElement('p');
+
+                h2.textContent = character.name;
+                header.appendChild(h2);
+                article.appendChild(header);
+                article.appendChild(p);
+                link.appendChild(article); // Colocar o article dentro do link
+                contentDiv.appendChild(link);
+
+                link.setAttribute('href', '?page=card&character=' + character.id);
+                p.innerHTML = `<img src="${character.image}" alt="${character.name} image"><br>Gender: ${character.gender}<br>Origin: ${character.origin.name}<br>Status: ${character.status}<br>Type: ${character.type ? character.type : 'Null'}`;
+            });
+        }
     }
 
 </script>
