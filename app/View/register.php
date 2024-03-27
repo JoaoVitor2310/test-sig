@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <h1>Teste SIG - João Vitor Matos Gouveia</h1>
+    <h1>Teste - João Vitor Matos Gouveia</h1>
     <div class="auth-screen">
         <form id="registerForm" method="POST" action="/api/register">
             <h2>Crie sua conta</h2>

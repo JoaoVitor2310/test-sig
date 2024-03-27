@@ -1,54 +1,67 @@
-    body {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: column;
-        align-items: center;
-        justify-items: center;
-        font-family: Arial, Helvetica, sans-serif;
-        background-image: linear-gradient(45deg, cyan, yellow);
-    }
+* {
+    margin: 0px;
+}
 
-    #content {
-        display: grid;
-        background-color: rgba(0, 0, 0, 0.5);
-        border-radius: 1%;
-        grid-template-rows: repeat(3, auto);
-        grid-template-columns: repeat(5, 1fr);
-    }
+body {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    background-image: linear-gradient(45deg, cyan, yellow);
+}
 
-    a {
-        text-decoration: none;
-    }
+#content {
+    display: grid;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 1%;
+    grid-template-rows: repeat(3, auto);
+    grid-template-columns: repeat(5, 1fr);
+}
 
-    a:hover {
-        text-decoration: underline;
-    }
+a {
+    text-decoration: none;
+}
 
-    a:visited {
-        color: #000;
-    }
+a:hover {
+    text-decoration: underline;
+}
 
-    article {
-        background-color: aqua;
-        margin: 5px;
-        border-radius: 1%;
-    }
+a:visited {
+    color: #000;
+}
 
-    h2 {
-        text-align: center;
-        margin: 0;
-    }
+article {
+    background-color: aqua;
+    margin: 5px;
+    border-radius: 1%;
+}
 
-    p {
-        margin: 10px;
-        text-align: center;
-    }
+h2 {
+    text-align: center;
+    margin: 0;
+}
 
-    /* #characterPage {
-        background-color: red;
-    } */
+p {
+    margin: 10px;
+    text-align: center;
+}
 
-    div#searchBar {
-        background-color: cyan;
-        border-radius: 1%;
-    }
+
+div#searchBar {
+    background-color: cyan;
+    border-radius: 1%;
+    padding: 1%;
+}
+
+#nav-bar {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.877);
+    padding: 1%;
+    margin-bottom: 10px;
+}
+
+#nav-bar span {
+    margin-right: 5px;
+}

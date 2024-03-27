@@ -1,6 +1,9 @@
 <?php
 include 'app\utils\protect.php';
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -14,13 +17,18 @@ include 'app\utils\protect.php';
 
 <body>
     <div id="nav-bar">
-        <a href="?page=home">
-            Home
-        </a>
-        <a href="app\utils\logout.php">
-            Logout
-        </a>
-        <h5>Existem mais personagens a serem mostrados de outras páginas, a páginação será desenvolvida</h5>
+        <span>
+
+            <a href="?page=home">
+                Home
+            </a>
+        </span>
+        <span>
+
+            <a href="app\utils\logout.php">
+                Logout
+            </a>
+        </span>
     </div>
 
     <div id="searchBar">
@@ -69,7 +77,7 @@ include 'app\utils\protect.php';
     <br>
 
     <div id="content">
-        <!-- Exemplo -->
+        <!-- Exemplo de como vai ficar-->
         <!-- <article>
             <a href="">
                 <header>
@@ -85,16 +93,22 @@ include 'app\utils\protect.php';
 <script>
 
     const getCharacters = async () => {
-        const response = await fetch('https://rickandmortyapi.com/api/character', {
+        const response = await fetch('app/router/CharactersRoutes.php', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         });
 
+        // const response = await fetch('https://rickandmortyapi.com/api/character', { // Fazer em javascript seria mais direto ao ponto, comento mais sobre isso no README
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     }
+        // });
+
         const data = await response.json();
-        console.log(data);
-        const { results, info } = data;
+        const { results } = data;
 
         const contentDiv = document.getElementById('content');
 
@@ -116,6 +130,7 @@ include 'app\utils\protect.php';
             p.innerHTML = `<img src="${character.image}" alt="${character.name} image"><br>Gender: ${character.gender}<br>Origin: ${character.origin.name}<br>Status: ${character.status}<br>Type: ${character.type ? character.type : 'Null'}`;
         });
     }
+
     getCharacters();
 
     const search = async (page) => {
@@ -166,9 +181,6 @@ include 'app\utils\protect.php';
             baseUrl = "https://rickandmortyapi.com/api/character?" + `page=${pageNumber}&` + queryParams.join('&');
         }
 
-        console.log(baseUrl);
-        console.log("pageNumber: " + pageNumber);
-
         const response = await fetch(baseUrl, {
             method: 'GET',
             headers: {
@@ -177,14 +189,13 @@ include 'app\utils\protect.php';
         });
 
         const data = await response.json();
-        console.log(data);
 
         if (data.error) {
             alert("Nenhum personagem com essas características.")
         } else {
             const contentDiv = document.getElementById('content');
             contentDiv.innerHTML = '';
-            const { results, info } = data;
+            const { results } = data;
 
             results.forEach((character, index) => {
                 const article = document.createElement('article');

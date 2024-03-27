@@ -1,5 +1,4 @@
 <?php
-// echo '<h1> PROTECT </h1>';
 
 if (!isset ($_SESSION)) {
     session_start();

@@ -90,7 +90,7 @@ class UserController
         // Cria uma instância do modelo de usuário
         $userModel = new UserModel();
 
-        // // Chama o método para registrar o usuário
+        // Chama o método para registrar o usuário
         $dbResponse = $userModel->loginUser($email);
 
         if (!$dbResponse) {
@@ -109,7 +109,6 @@ class UserController
             return array(
                 'error' => false,
                 'message' => 'Login realizado com sucesso.'
-                // 'message' => $hashedPassword
             );
 
         } else {

@@ -18,7 +18,7 @@
 
       return $pdo;
     }catch(PDOException $e){
-      echo "<div style='margin-top:100px;text-align:center;font-family:arial;'><h1 >Manutenção</h1><p>Retornaremos em breve</p><div>";
+      echo "<div style='margin-top:100px;text-align:center;font-family:arial;'><h1>Manutenção</h1><p>Retornaremos em breve</p><div>";
 
       die;
     }

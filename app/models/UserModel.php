@@ -3,6 +3,9 @@
 require_once '../utils/Conn.php';
 
 class UserModel
+
+// Classe responsável por realizar as consultas no banco de dados.
+
 {
     public function searchUser($email)
     {
@@ -28,7 +31,6 @@ class UserModel
 
         // Verifica se a inserção foi bem-sucedida
         if ($success) {
-            // $query = $pdo->prepare("SELECT id FROM users WHERE email = '$email' LIMIT 1");
             return $email;
         } else {
             return 0;
@@ -47,13 +49,5 @@ class UserModel
 
 
         return $user;
-
-        // Verifica se a inserção foi bem-sucedida
-        // if ($success) {
-        //     // $query = $pdo->prepare("SELECT id FROM users WHERE email = '$email' LIMIT 1");
-        //     return $email;
-        // } else {
-        //     return 0;
-        // }
     }
 }

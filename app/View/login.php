@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <h1>Teste SIG - João Vitor Matos Gouveia</h1>
+    <h1>Teste - João Vitor Matos Gouveia</h1>
     <div class="auth-screen">
         <form id="loginForm" method="POST" action="/api/register">
             <label for="">Login para autenticação</label>
@@ -43,7 +43,6 @@
             password
         };
 
-        // Envia a requisição POST para a rota /api/register
         const response = await fetch('app/router/UserRoutes.php', {
             method: 'POST',
             headers: {

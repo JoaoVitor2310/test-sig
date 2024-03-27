@@ -1,11 +1,6 @@
 <?php
 include 'app\utils\protect.php';
 
-// if (isset ($_GET['character'])) {
-//     $character = $_GET['character'];
-//     echo $character;
-// }
-
 ?>
 
 <!DOCTYPE html>
